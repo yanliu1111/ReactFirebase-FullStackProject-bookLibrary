@@ -8,6 +8,7 @@ import { Signup } from "./routes/Signup";
 import { Account } from "./routes/Account";
 import BookPage from "./routes/BookPage";
 import axios from "axios";
+import Footer from "./components/Footer";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -33,6 +34,7 @@ function App() {
         <Route path="/book/:id" element={<BookPage />} />
         <Route path=":id" />
       </Routes>
+      <Footer />
     </ThemeProvider>
   );
 }
