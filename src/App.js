@@ -6,6 +6,7 @@ import { Home } from "./routes/Home";
 import { Signin } from "./routes/Signin";
 import { Signup } from "./routes/Signup";
 import { Account } from "./routes/Account";
+import BookPage from "./routes/BookPage";
 import axios from "axios";
 
 function App() {
@@ -29,6 +30,8 @@ function App() {
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/book/:id" element={<BookPage />} />
+        <Route path=":id" />
       </Routes>
     </ThemeProvider>
   );
