@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+
 import appIcon from "../appIcon.png";
 import { useAuth } from "../context/AuthContext";
 
@@ -76,9 +76,17 @@ export const Navbar = () => {
           <li onClick={handleNav} className="border-b py-6">
             <Link to="/">Home</Link>
           </li>
-          <li onClick={handleNav} className="border-b py-6">
-            <Link to="/">Account</Link>
-          </li>
+
+          {user?.email ? (
+            <li onClick={handleNav} className="border-b py-6">
+              <Link to="/account">Account</Link>
+            </li>
+          ) : (
+            <li onClick={handleNav} className="border-b py-6">
+              <Link to="/signin">Sign In</Link>
+            </li>
+          )}
+
           <li className="py-6">
             <ThemeToggle />
           </li>
