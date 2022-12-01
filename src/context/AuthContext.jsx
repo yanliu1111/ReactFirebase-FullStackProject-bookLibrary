@@ -21,12 +21,17 @@ const AuthContextProvider = ({ children }) => {
     });
   };
 
-  const signIn = (email, password) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const signIn = async (email, password) => {
+    const results = await signInWithEmailAndPassword(auth, email, password);
+    // signInWithEmailAndPassword(auth, email, password);
+    setUser(results.user);
+    // console.log(results);
+    return results;
   };
 
-  const logout = () => {
-    return signOut(auth);
+  const logout = async () => {
+    await signOut(auth);
+    setUser({});
   };
 
   useEffect(() => {

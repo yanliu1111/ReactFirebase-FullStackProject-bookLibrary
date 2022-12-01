@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { BookItem } from "./BookItem";
 
 export const BookSearch = ({ books }) => {
   const [searchText, setSearchText] = React.useState("");
+  const [offset, setOffset] = useState(0);
+  const number = 8;
 
   // console.log(books);
   return (
@@ -33,7 +35,9 @@ export const BookSearch = ({ books }) => {
 
         <tbody>
           {books
-            .filter((value) => {
+            .filter((value, index) => {
+              if (!(index >= offset && index < offset + number)) return false;
+
               if (searchText === "") {
                 return value;
               } else if (
@@ -47,6 +51,20 @@ export const BookSearch = ({ books }) => {
             ))}
         </tbody>
       </table>
+      <div
+        onClick={() => {
+          setOffset(offset - number);
+        }}
+      >
+        prev
+      </div>
+      <div
+        onClick={() => {
+          setOffset(offset + number);
+        }}
+      >
+        next
+      </div>
     </div>
   );
 };

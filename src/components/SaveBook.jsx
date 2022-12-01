@@ -40,6 +40,7 @@ const SaveBook = () => {
             <tr className="border-b">
               <th className="px-4">Book Id</th>
               <th className="text-left">Book</th>
+              <th className="text-left hidden sm:table-cell">Authors</th>
               <th className="text-left">Remove</th>
             </tr>
           </thead>
@@ -50,16 +51,16 @@ const SaveBook = () => {
                 <td>
                   <Link to={`/book/${book.id}`}>
                     <div className="flex items-center">
-                      <img
-                        src={book?.image_url}
-                        className="w-10 mr-4"
-                        alt="/"
-                      />
+                      <img src={book?.image} className="w-16 mr-4" alt="/" />
                       <div>
+                        {/* {JSON.stringify(book)} */}
                         <p className="hidden sm:table-cell">{book?.title}</p>
                       </div>
                     </div>
                   </Link>
+                </td>
+                <td className="hidden sm:table-cell">
+                  <p className="flex items-center">{book?.authors}</p>
                 </td>
                 <td className="pl-8">
                   <AiOutlineClose
