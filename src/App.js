@@ -12,7 +12,7 @@ import Footer from "./components/Footer";
 import AuthContextProvider from "./context/AuthContext";
 function App() {
   const [books, setBooks] = useState([]);
-  let url = "https://example-data.draftbit.com/books?_limit=24";
+  let url = "https://example-data.draftbit.com/books?_limit=48";
 
   useEffect(() => {
     axios
