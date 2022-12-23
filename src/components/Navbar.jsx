@@ -30,8 +30,8 @@ export const Navbar = () => {
     <div className="rounded-div flex items-center justify-between h-20 font-bold">
       <div className="items-center justify-between">
         <Link to="/" className="flex items-center justify-between p-2">
-          <img className="w-16 rounded-full" src={appIcon} alt="/" />
-          <h1 className="text-2xl p-2">Bookworm</h1>
+          <img className="w-16 rounded-full shadow-xl" src={appIcon} alt="/" />
+          <h1 className="text-2xl p-2 filter drop-shadow-lg">Bookworm</h1>
         </Link>
       </div>
       <div className="hidden md:block">
@@ -91,20 +91,24 @@ export const Navbar = () => {
             <ThemeToggle />
           </li>
         </ul>
+
         <div className="flex flex-col w-full p-4">
-          <Link to="/signin">
-            <button
-              onClick={handleNav}
-              className="w-full my-2 p-3 bg-primary text-primary border border-secondary rounded-2xl shadow-xl"
-            >
-              Sign In
-            </button>
-          </Link>
-          <Link onClick={handleNav} to="/signup">
-            <button className="w-full my-2 p-3 bg-button text-btnText rounded-2xl shadow-xl">
-              Sign Up
-            </button>
-          </Link>
+          {user?.email ? (
+            <Link to="/">
+              <button
+                onClick={handleSignOut}
+                className="w-full my-2 p-3 bg-primary text-primary border border-secondary rounded-2xl shadow-xl"
+              >
+                Sign Out
+              </button>
+            </Link>
+          ) : (
+            <Link onClick={handleNav} to="/signup">
+              <button className="w-full my-2 p-3 bg-button text-btnText rounded-2xl shadow-xl">
+                Sign Up
+              </button>
+            </Link>
+          )}
         </div>
       </div>
     </div>

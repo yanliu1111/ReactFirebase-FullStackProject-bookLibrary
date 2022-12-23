@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 
@@ -11,9 +11,22 @@ const SaveBook = () => {
 
   useEffect(() => {
     onSnapshot(doc(db, "users", `${user?.email}`), (doc) => {
+      console.log("Current data: ", doc.data()?.readList);
+      if (doc.data()?.readList === undefined) {
+        console.log("need to create readlist");
+        giveUserEmptyBooklist(user?.email);
+      }
       setBooks(doc.data()?.readList);
     });
   }, [user?.email]);
+
+  const giveUserEmptyBooklist = async (email) => {
+    const bookPath = doc(db, "users", `${email}`);
+
+    await setDoc(bookPath, {
+      readList: [],
+    });
+  };
 
   const bookPath = doc(db, "users", `${user?.email}`);
   const deleteBook = async (passedid) => {
@@ -26,10 +39,10 @@ const SaveBook = () => {
       console.log(error.message);
     }
   };
-
+  console.log("#######", books);
   return (
     <div>
-      {books?.length === 0 ? (
+      {!books || books.length === 0 ? (
         <p>
           You don't have any books saved. Please save a book to add it to your
           read list.<Link to="/">Click here to search books.</Link>

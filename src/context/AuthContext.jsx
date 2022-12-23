@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { auth, db } from "../firebase";
 import {
+  GoogleAuthProvider,
+  signInWithRedirect,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -14,7 +16,16 @@ const UserContext = createContext();
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
 
+  const googleSignIn = async (email) => {
+    const provider = new GoogleAuthProvider();
+    // setDoc(doc(db, "users", email), {
+    //   readList: [],
+    // });
+    await signInWithRedirect(auth, provider);
+  };
+
   const signUp = (email, password) => {
+    console.log("signUp");
     createUserWithEmailAndPassword(auth, email, password);
     return setDoc(doc(db, "users", email), {
       readList: [],
@@ -37,12 +48,21 @@ const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const unsubsrcibe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      console.log(currentUser);
     });
     return unsubsrcibe();
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, signUp, signIn, logout }}>
+    <UserContext.Provider
+      value={{
+        googleSignIn,
+        user,
+        signUp,
+        signIn,
+        logout,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

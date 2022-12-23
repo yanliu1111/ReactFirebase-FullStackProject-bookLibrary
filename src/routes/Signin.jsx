@@ -1,14 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+// import GoogleButton from "react-google-button";
 import { AiOutlineMail, AiFillLock } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { getAuth, FacebookAuthProvider, signInWithPopup } from "firebase/auth";
+import { AiFillFacebook } from "react-icons/ai";
+
+import {
+  GoogleLoginButton,
+  FacebookLoginButton,
+  TwitterLoginButton,
+} from "react-social-login-buttons";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { signIn } = useAuth();
+  const { googleSignIn, user, signIn } = useAuth();
+  console.log("userrrr", user);
+  const handleGoogleSignIn = () => {
+    try {
+      googleSignIn();
+      // navigate("/account");
+    } catch (e) {
+      setError(e.message);
+      console.log(e.message);
+      throw e;
+    }
+  };
+
+  //handleFacebookSignIn
+
+  const handleFacebookSignIn = async () => {
+    const provider = new FacebookAuthProvider();
+    provider.addScope("user_birthday");
+    provider.setCustomParameters({
+      display: "popup",
+    });
+
+    const auth = getAuth();
+    console.log("auth", auth);
+    await signInWithPopup(auth, provider)
+      .then((result) => {
+        // The signed-in user info.
+        const user = result.user;
+        console.log("facebook user", user);
+        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+        const credential = FacebookAuthProvider.credentialFromResult(result);
+        console.log("credential", credential);
+        const accessToken = credential.accessToken;
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = FacebookAuthProvider.credentialFromError(error);
+
+        console.log("facebook error", error);
+      });
+  };
+
+  useEffect(() => {
+    if (user !== null) {
+      navigate("/account");
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -61,6 +121,15 @@ const Signin = () => {
             Sign up
           </Link>
         </p>
+        <div>
+          <GoogleLoginButton onClick={handleGoogleSignIn} />
+        </div>
+        <div>
+          <FacebookLoginButton onClick={handleFacebookSignIn} />
+        </div>
+        <div>
+          <TwitterLoginButton onClick={() => alert("Hello, I am waiting")} />
+        </div>
       </div>
     </div>
   );

@@ -1,12 +1,32 @@
-import React, { useState } from "react";
+import { onSnapshot, doc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { db } from "../firebase";
 import { BookItem } from "./BookItem";
+import ReactPaginate from "react-paginate";
 
 export const BookSearch = ({ books }) => {
+  const { user } = useAuth();
+
   const [searchText, setSearchText] = React.useState("");
   const [offset, setOffset] = useState(0);
+  const [userData, setUserData] = useState();
   const number = 8;
 
-  // console.log(books);
+  useEffect(() => {
+    onSnapshot(doc(db, "users", `${user?.email}`), (doc) => {
+      setUserData(doc.data());
+    });
+  }, [user?.email]);
+
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * number) % books.length;
+    console.log(
+      `User requested page number ${event.selected}, which is offset ${newOffset}`
+    );
+    setOffset(newOffset);
+  };
+
   return (
     <div className="rounded-div my-4 ">
       <div className="flex flex-col md:flex-row justify-between pt-4 pb-6 text-center md:text-right">
@@ -47,11 +67,21 @@ export const BookSearch = ({ books }) => {
               }
             })
             .map((book) => (
-              <BookItem key={book.id} book={book} />
+              <BookItem key={book.id} book={book} userData={userData} />
             ))}
         </tbody>
       </table>
-      <div
+      <ReactPaginate
+        breakLabel="..."
+        nextLabel="next >"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={5}
+        pageCount={books.length / number}
+        previousLabel="< previous"
+        renderOnZeroPageCount={null}
+      />
+      {/* <div
+        className="p-4 hover:text-accent"
         onClick={() => {
           setOffset(offset - number);
         }}
@@ -59,12 +89,13 @@ export const BookSearch = ({ books }) => {
         prev
       </div>
       <div
+        className="p-4 hover:text-accent"
         onClick={() => {
           setOffset(offset + number);
         }}
       >
         next
-      </div>
+      </div> */}
     </div>
   );
 };

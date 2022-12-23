@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 import { Link } from "react-router-dom";
@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 
-export const BookItem = ({ book }) => {
+export const BookItem = ({ book, userData }) => {
   const [savedBook, setSavedBook] = useState(false);
   const { user } = useAuth();
   const bookPath = doc(db, "users", `${user?.email}`);
@@ -26,8 +26,17 @@ export const BookItem = ({ book }) => {
       alert("Please sign in to save a book to your read list");
     }
   };
-  // if readlist has usr.book.id, color keeps red, in Search page
 
+  // console.log(user);
+
+  useEffect(() => {
+    // console.log(userData, book);
+
+    if (userData?.readList?.some((item) => item.id === book.id)) {
+      setSavedBook(true);
+    }
+  }, [userData, book.id]);
+  // if readlist has usr.book.id, color keeps red, in Search page
   return (
     <tr className="h-[80px] boder-b overflow-hidden">
       <td onClick={saveBook}>
@@ -42,7 +51,7 @@ export const BookItem = ({ book }) => {
         <Link to={`/book/${book.id}`}>
           <div>
             <img
-              className="h-40 mr-2 hover:scale-105 ease-in-out duration-300"
+              className="flex-auto w-64 p-2  hover:scale-105 ease-in-out duration-300"
               src={book?.image_url}
               alt={book.title}
             />
