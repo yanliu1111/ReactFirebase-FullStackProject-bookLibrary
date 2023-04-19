@@ -4,10 +4,9 @@
 This project was build on Nov. 2022. It was my first full stack project in Inception U bootcamp. It is a book review and store web app.
 
 1. Users can authenticate using different social media accounts, or signup using email address.
-2. Users can search and review the details of the books, API used is public Books website.
+2. Users can search and review the details of the book, API connect with public Books website. The book details encompass elements such as book cover, summary, authors, publication year, and more.
 3. Users can review books and store the favorite books in their profile. CRUD operations are available for the books stored in the profile.
-   using different
-   Users can review books and store the favorite books in their profile. Users can also buy books from the store.
+4. In book search page, there is Like 🧡 selection beside each book, user can click like if they recommend the book.
 ## 📚Tech Stack
 - Create React App
 - Tailwind CSS
